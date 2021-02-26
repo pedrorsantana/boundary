@@ -78,8 +78,9 @@ func (r *Repository) CreateTcpTarget(ctx context.Context, target *TcpTarget, opt
 			msgs := make([]*oplog.Message, 0, 2)
 			var targetOplogMsg oplog.Message
 			returnedTarget = t.Clone()
+
 			if err := w.Create(ctx, returnedTarget, db.NewOplogMsg(&targetOplogMsg)); err != nil {
-				return errors.Wrap(err, op)
+				return errors.Wrap(err, op, errors.WithMsg("Unable to create target"))
 			}
 			msgs = append(msgs, &targetOplogMsg)
 			if len(newHostSets) > 0 {

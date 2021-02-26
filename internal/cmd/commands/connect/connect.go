@@ -64,14 +64,15 @@ var (
 type Command struct {
 	*base.Command
 
-	flagAuthzToken string
-	flagListenAddr string
-	flagListenPort int
-	flagTargetId   string
-	flagTargetName string
-	flagHostId     string
-	flagExec       string
-	flagUsername   string
+	flagAuthzToken  string
+	flagListenAddr  string
+	flagListenPort  int
+	flagTargetId    string
+	flagTargetName  string
+	flagHostId      string
+	flagExec        string
+	flagUsername    string
+	flagImpersonate bool
 
 	// HTTP
 	httpFlags
@@ -215,6 +216,14 @@ func (c *Command) Flags() *base.FlagSets {
 		Completion: complete.PredictNothing,
 		Usage:      "Cause errors coming from this command to be output as JSON. This is experimental only and currently only meant for internal purposes. The format may change at any time and this flag/env var may be removed or modified at any time.",
 		Hidden:     true,
+	})
+
+	f.BoolVar(&base.BoolVar{
+		Name:       "impersonate",
+		Target:     &c.flagImpersonate,
+		EnvVar:     "BOUNDARY_CONNECT_IMPERSONATE",
+		Completion: complete.PredictNothing,
+		Usage:      `Assume the accounts access role.`,
 	})
 
 	switch c.Func {
@@ -384,6 +393,9 @@ func (c *Command) Run(args []string) (retCode int) {
 		}
 		if len(c.FlagScopeName) > 0 {
 			opts = append(opts, targets.WithScopeName(c.FlagScopeName))
+		}
+		if c.flagImpersonate {
+			opts = append(opts, targets.WithImpersonate(c.flagImpersonate))
 		}
 
 		sar, err := targetClient.AuthorizeSession(c.Context, c.flagTargetId, opts...)
@@ -811,6 +823,23 @@ func (c *Command) handleExec(passthroughArgs []string) {
 			return
 		}
 		args = append(args, kubeArgs...)
+	}
+
+	// TODO: Implementar obtenção da credencial
+	//	os.Setenv("PGPASSWORD","123");
+	if c.flagImpersonate {
+		switch c.Func {
+		case "ssh":
+			{
+				c.flagExec = "sshpass"
+				args = append([]string{"-p", "Gkb43tptn14s9qmd.", "ssh"}, args...)
+			}
+		case "postgres":
+			{
+				os.Setenv("PGPASSWORD", "mysecretpassword")
+			}
+		}
+
 	}
 
 	args = append(passthroughArgs, args...)
