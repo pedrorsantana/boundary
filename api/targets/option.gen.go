@@ -151,30 +151,6 @@ func DefaultName() Option {
 	}
 }
 
-func WithTcpTargetPassword(inPassword string) Option {
-	return func(o *options) {
-		raw, ok := o.postMap["attributes"]
-		if !ok {
-			raw = interface{}(map[string]interface{}{})
-		}
-		val := raw.(map[string]interface{})
-		val["password"] = inPassword
-		o.postMap["attributes"] = val
-	}
-}
-
-func DefaultTcpTargetPassword() Option {
-	return func(o *options) {
-		raw, ok := o.postMap["attributes"]
-		if !ok {
-			raw = interface{}(map[string]interface{}{})
-		}
-		val := raw.(map[string]interface{})
-		val["password"] = nil
-		o.postMap["attributes"] = val
-	}
-}
-
 func WithScopeId(inScopeId string) Option {
 	return func(o *options) {
 		o.postMap["scope_id"] = inScopeId
@@ -184,12 +160,6 @@ func WithScopeId(inScopeId string) Option {
 func WithScopeName(inScopeName string) Option {
 	return func(o *options) {
 		o.postMap["scope_name"] = inScopeName
-	}
-}
-
-func WithImpersonate(impersonate bool) Option {
-	return func(o *options) {
-		o.postMap["impersonate"] = impersonate
 	}
 }
 

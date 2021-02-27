@@ -26,6 +26,7 @@ type options struct {
 	withTestTofu       []byte
 	withListingConvert bool
 	withSessionIds     []string
+	WithImpersonate    bool
 }
 
 func getDefaultOptions() options {
@@ -81,6 +82,13 @@ func WithTestTofu(tofu []byte) Option {
 func WithSessionIds(ids ...string) Option {
 	return func(o *options) {
 		o.withSessionIds = ids
+	}
+}
+
+// WithImpersonate provides an option to assume impersonate
+func WithImpersonate(impersonate bool) Option {
+	return func(o *options) {
+		o.WithImpersonate = impersonate
 	}
 }
 

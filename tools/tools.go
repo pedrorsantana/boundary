@@ -17,7 +17,7 @@ package tools
 //go:generate go install github.com/bufbuild/buf/cmd/buf
 //go:generate go install github.com/favadi/protoc-go-inject-tag
 //go:generate go install github.com/go-swagger/go-swagger/cmd/swagger
-//go:generate go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
+//go:generate go install g
 //go:generate go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
 //go:generate go install golang.org/x/tools/cmd/goimports
 //go:generate go install github.com/oligot/go-mod-upgrade

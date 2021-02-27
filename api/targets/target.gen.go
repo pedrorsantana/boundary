@@ -29,6 +29,7 @@ type Target struct {
 	WorkerFilter           string                 `json:"worker_filter,omitempty"`
 	Attributes             map[string]interface{} `json:"attributes,omitempty"`
 	AuthorizedActions      []string               `json:"authorized_actions,omitempty"`
+	Impersonate            bool                   `json:"impersonate,omitempty"`
 
 	response *api.Response
 }

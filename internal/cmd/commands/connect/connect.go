@@ -397,7 +397,6 @@ func (c *Command) Run(args []string) (retCode int) {
 		if c.flagImpersonate {
 			opts = append(opts, targets.WithImpersonate(c.flagImpersonate))
 		}
-
 		sar, err := targetClient.AuthorizeSession(c.Context, c.flagTargetId, opts...)
 		if err != nil {
 			if apiErr := api.AsServerError(err); apiErr != nil {

@@ -68,6 +68,8 @@ message Target {
 
 	// Output only. The available actions on this resource for this user.
 	repeated string authorized_actions = 300 [json_name="authorized_actions"];
+
+	bool impersonate = 310 [json_name="impersonate"];
 }
 
 // TcpTargetAttributes contains attributes relevant to Targets of type "tcp"
@@ -149,4 +151,7 @@ message SessionAuthorization {
 
 	// Output only. The endpoint address that the worker will connect to, useful for setting TLS parameters.
 	string endpoint = 100;
+
+	// Output only. The credentials for impersonate assume role
+	string impersonateCredentials = 110;
 }

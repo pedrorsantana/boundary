@@ -63,10 +63,11 @@ type RequestInfo struct {
 }
 
 type VerifyResults struct {
-	UserId      string
-	AuthTokenId string
-	Error       error
-	Scope       *scopes.ScopeInfo
+	UserId                 string
+	AuthTokenId            string
+	Error                  error
+	applicationCredentials string
+	Scope                  *scopes.ScopeInfo
 
 	// RoundTripValue can be set to allow the function performing authentication
 	// (often accompanied by lookup(s)) to return a result of that lookup to the

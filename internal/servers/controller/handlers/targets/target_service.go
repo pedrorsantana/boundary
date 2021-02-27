@@ -291,6 +291,7 @@ func (s Service) AuthorizeSession(ctx context.Context, req *pbs.AuthorizeSession
 		target.WithScopeId(req.GetScopeId()),
 		target.WithScopeName(req.GetScopeName()),
 	)
+
 	if authResults.Error != nil {
 		return nil, authResults.Error
 	}
@@ -545,16 +546,17 @@ HostSetIterationLoop:
 	encodedMarshaledSad := base58.FastBase58Encoding(marshaledSad)
 
 	ret := &pb.SessionAuthorization{
-		SessionId:          sess.PublicId,
-		TargetId:           t.GetPublicId(),
-		Scope:              authResults.Scope,
-		CreatedTime:        sess.CreateTime.GetTimestamp(),
-		Type:               t.GetType(),
-		AuthorizationToken: string(encodedMarshaledSad),
-		UserId:             authResults.UserId,
-		HostId:             chosenId.hostId,
-		HostSetId:          chosenId.hostSetId,
-		Endpoint:           endpointUrl.String(),
+		SessionId:              sess.PublicId,
+		TargetId:               t.GetPublicId(),
+		Scope:                  authResults.Scope,
+		CreatedTime:            sess.CreateTime.GetTimestamp(),
+		Type:                   t.GetType(),
+		AuthorizationToken:     string(encodedMarshaledSad),
+		UserId:                 authResults.UserId,
+		HostId:                 chosenId.hostId,
+		HostSetId:              chosenId.hostSetId,
+		Endpoint:               endpointUrl.String(),
+		ImpersonateCredentials: "Cravado123.",
 	}
 	return &pbs.AuthorizeSessionResponse{Item: ret}, nil
 }

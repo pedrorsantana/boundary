@@ -23,6 +23,7 @@ type options struct {
 	withScopeId                string
 	withScopeIds               []string
 	withScopeName              string
+	WithImpersonate            bool
 	withUserId                 string
 	withTargetType             *TargetType
 	withHostSets               []string
@@ -41,6 +42,7 @@ func getDefaultOptions() options {
 		withScopeId:                "",
 		withScopeIds:               nil,
 		withScopeName:              "",
+		WithImpersonate:            false,
 		withUserId:                 "",
 		withTargetType:             nil,
 		withHostSets:               nil,
@@ -99,6 +101,13 @@ func WithScopeIds(scopeIds []string) Option {
 func WithScopeName(scopeName string) Option {
 	return func(o *options) {
 		o.withScopeName = scopeName
+	}
+}
+
+// WithImpersonate provides an option to assume impersonate
+func WithImpersonate(impersonate bool) Option {
+	return func(o *options) {
+		o.WithImpersonate = impersonate
 	}
 }
 
