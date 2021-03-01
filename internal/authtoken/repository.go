@@ -296,6 +296,32 @@ func (r *Repository) ListAuthTokens(ctx context.Context, withScopeIds []string, 
 	return authTokens, nil
 }
 
+type AuthMethodPassword struct {
+	Password string
+}
+
+func (r *Repository) GetAuthMethodPasswordByAuthTokenId(ctx context.Context, id string, opt ...Option) (string, error) {
+	const op = "authtoken.(Repository).GetAuthMethodByTokenId"
+	if len(id) == 0 {
+		return "", errors.New(errors.InvalidParameter, op, "missing auth_token id")
+	}
+
+	rows, err := r.reader.Query(ctx, "SELECT auth_password_method.password as password from auth_password_method INNER JOIN auth_account ON auth_account.auth_method_id=auth_password_method.public_id INNER JOIN auth_token ON auth_token.auth_account_id=auth_account.public_id WHERE auth_token.public_id = ?", []interface{}{id})
+	if err != nil {
+		return "", err
+	}
+
+	var pass *AuthMethodPassword = &AuthMethodPassword{}
+	defer rows.Close()
+	if rows.Next() {
+		if err := r.reader.ScanRows(rows, pass); err != nil {
+			return "", errors.Wrap(err, op, errors.WithMsg("scan row failed"))
+		}
+	}
+
+	return pass.Password, nil
+}
+
 // DeleteAuthToken deletes the token with the provided id from the repository returning a count of the
 // number of records deleted.  All options are ignored.
 func (r *Repository) DeleteAuthToken(ctx context.Context, id string, opt ...Option) (int, error) {

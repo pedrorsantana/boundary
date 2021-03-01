@@ -77,6 +77,7 @@ type Service struct {
 	serversRepoFn    common.ServersRepoFactory
 	sessionRepoFn    common.SessionRepoFactory
 	staticHostRepoFn common.StaticRepoFactory
+	authRepoFn       common.AuthTokenRepoFactory
 	kmsCache         *kms.Kms
 }
 
@@ -87,6 +88,7 @@ func NewService(
 	iamRepoFn common.IamRepoFactory,
 	serversRepoFn common.ServersRepoFactory,
 	sessionRepoFn common.SessionRepoFactory,
+	authRepoFn common.AuthTokenRepoFactory,
 	staticHostRepoFn common.StaticRepoFactory) (Service, error) {
 	if repoFn == nil {
 		return Service{}, fmt.Errorf("nil target repository provided")
@@ -103,12 +105,16 @@ func NewService(
 	if staticHostRepoFn == nil {
 		return Service{}, fmt.Errorf("nil static host repository provided")
 	}
+	if authRepoFn == nil {
+		return Service{}, fmt.Errorf("nil auth token repository provided")
+	}
 	return Service{
 		repoFn:           repoFn,
 		iamRepoFn:        iamRepoFn,
 		serversRepoFn:    serversRepoFn,
 		sessionRepoFn:    sessionRepoFn,
 		staticHostRepoFn: staticHostRepoFn,
+		authRepoFn:       authRepoFn,
 		kmsCache:         kmsCache,
 	}, nil
 }
@@ -546,19 +552,42 @@ HostSetIterationLoop:
 	encodedMarshaledSad := base58.FastBase58Encoding(marshaledSad)
 
 	ret := &pb.SessionAuthorization{
-		SessionId:              sess.PublicId,
-		TargetId:               t.GetPublicId(),
-		Scope:                  authResults.Scope,
-		CreatedTime:            sess.CreateTime.GetTimestamp(),
-		Type:                   t.GetType(),
-		AuthorizationToken:     string(encodedMarshaledSad),
-		UserId:                 authResults.UserId,
-		HostId:                 chosenId.hostId,
-		HostSetId:              chosenId.hostSetId,
-		Endpoint:               endpointUrl.String(),
-		ImpersonateCredentials: "Cravado123.",
+		SessionId:          sess.PublicId,
+		TargetId:           t.GetPublicId(),
+		Scope:              authResults.Scope,
+		CreatedTime:        sess.CreateTime.GetTimestamp(),
+		Type:               t.GetType(),
+		AuthorizationToken: string(encodedMarshaledSad),
+		UserId:             authResults.UserId,
+		HostId:             chosenId.hostId,
+		HostSetId:          chosenId.hostSetId,
+		Endpoint:           endpointUrl.String(),
 	}
+
+	if req.GetImpersonate() {
+		pass, err := s.getAuthMethodFromToken(ctx, sess.AuthTokenId)
+		if err != nil {
+			return nil, err
+		}
+		ret.ImpersonateCredentials = pass
+	}
+
 	return &pbs.AuthorizeSessionResponse{Item: ret}, nil
+}
+
+func (s Service) getAuthMethodFromToken(ctx context.Context, id string) (string, error) {
+	sessionRepo, err := s.authRepoFn()
+	if err != nil {
+		return "", err
+	}
+
+	pass, err := sessionRepo.GetAuthMethodPasswordByAuthTokenId(ctx, id)
+
+	if err != nil {
+		return "", err
+	}
+
+	return pass, nil
 }
 
 func (s Service) getFromRepo(ctx context.Context, id string) (*pb.Target, error) {

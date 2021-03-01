@@ -91,19 +91,19 @@ type Command struct {
 
 	Func string
 
-	sessionAuthzData *targetspb.SessionAuthorizationData
-
-	connWg             *sync.WaitGroup
-	listenerCloseOnce  sync.Once
-	listener           *net.TCPListener
-	listenerAddr       *net.TCPAddr
-	connsLeftCh        chan int32
-	connectionsLeft    atomic.Int32
-	expiration         time.Time
-	execCmdReturnValue *atomic.Int32
-	proxyCtx           context.Context
-	proxyCancel        context.CancelFunc
-	outputJsonErrors   bool
+	sessionAuthzData       *targetspb.SessionAuthorizationData
+	connWg                 *sync.WaitGroup
+	listenerCloseOnce      sync.Once
+	listener               *net.TCPListener
+	listenerAddr           *net.TCPAddr
+	connsLeftCh            chan int32
+	connectionsLeft        atomic.Int32
+	expiration             time.Time
+	execCmdReturnValue     *atomic.Int32
+	proxyCtx               context.Context
+	proxyCancel            context.CancelFunc
+	outputJsonErrors       bool
+	impersonateCredentials string
 }
 
 func (c *Command) Synopsis() string {
@@ -342,7 +342,6 @@ func (c *Command) Run(args []string) (retCode int) {
 		c.PrintCliError(fmt.Errorf("Could not successfully parse listen address of %s", c.flagListenAddr))
 		return 3
 	}
-
 	authzString := c.flagAuthzToken
 	switch {
 	case authzString != "":
@@ -406,6 +405,7 @@ func (c *Command) Run(args []string) (retCode int) {
 			c.PrintCliError(fmt.Errorf("Error trying to authorize a session against target: %w", err))
 			return 2
 		}
+		c.impersonateCredentials = sar.GetItem().(*targets.SessionAuthorization).ImpersonateCredentials
 		authzString = sar.GetItem().(*targets.SessionAuthorization).AuthorizationToken
 	}
 
@@ -819,18 +819,16 @@ func (c *Command) handleExec(passthroughArgs []string) {
 		args = append(args, kubeArgs...)
 	}
 
-	// TODO: Implementar obtenção da credencial
-	//	os.Setenv("PGPASSWORD","123");
 	if c.flagImpersonate {
 		switch c.Func {
 		case "ssh":
 			{
 				c.flagExec = "sshpass"
-				args = append([]string{"-p", "Gkb43tptn14s9qmd.", "ssh"}, args...)
+				args = append([]string{"-p", c.impersonateCredentials, "ssh"}, args...)
 			}
 		case "postgres":
 			{
-				os.Setenv("PGPASSWORD", "mysecretpassword")
+				os.Setenv("PGPASSWORD", c.impersonateCredentials)
 			}
 		}
 

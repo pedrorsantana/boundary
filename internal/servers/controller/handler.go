@@ -144,6 +144,7 @@ func handleGrpcGateway(c *Controller, props HandlerProperties) (http.Handler, er
 		c.IamRepoFn,
 		c.ServersRepoFn,
 		c.SessionRepoFn,
+		c.AuthTokenRepoFn,
 		c.StaticHostRepoFn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create target handler service: %w", err)

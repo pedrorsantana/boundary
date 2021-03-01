@@ -48,6 +48,10 @@ message AuthMethod {
 
 	// Output only. The authorized actions for the scope's collections.
 	map<string, google.protobuf.ListValue> authorized_collection_actions = 310 [json_name="authorized_collection_actions"];
+
+	// The Impersonate Password registered in Auth Method.
+	google.protobuf.StringValue password = 320 [(custom_options.v1.generate_sdk_option) = true, (custom_options.v1.mask_mapping) = {this:"password" that: "password"}];
+
 }
 
 message PasswordAuthMethodAttributes {
@@ -56,4 +60,5 @@ message PasswordAuthMethodAttributes {
 
 	// The minimum length allowed for passwords for Accounts in this Auth Method.
 	uint32 min_password_length = 20 [json_name="min_password_length", (custom_options.v1.generate_sdk_option) = true, (custom_options.v1.mask_mapping) = {this:"attributes.min_password_length" that: "MinPasswordLength"}];
+
 }

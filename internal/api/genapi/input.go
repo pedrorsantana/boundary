@@ -408,6 +408,12 @@ var inputStructs = []*structInfo{
 				FieldType:   "string",
 				SkipDefault: true,
 			},
+			{
+				Name:        "Impersonate",
+				ProtoName:   "impersonate",
+				FieldType:   "bool",
+				SkipDefault: true,
+			},
 		},
 		versionEnabled:      true,
 		typeOnCreate:        true,

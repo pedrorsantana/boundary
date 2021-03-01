@@ -201,6 +201,7 @@ func (r *Repository) UpdateAuthMethod(ctx context.Context, authMethod *AuthMetho
 		case strings.EqualFold("description", f):
 		case strings.EqualFold("MinLoginNameLength", f):
 		case strings.EqualFold("MinPasswordLength", f):
+		case strings.EqualFold("password", f):
 		default:
 			return nil, db.NoRowsAffected, errors.New(errors.InvalidFieldMask, op, f)
 		}
@@ -212,6 +213,7 @@ func (r *Repository) UpdateAuthMethod(ctx context.Context, authMethod *AuthMetho
 			"Description":        authMethod.Description,
 			"MinPasswordLength":  authMethod.MinPasswordLength,
 			"MinLoginNameLength": authMethod.MinLoginNameLength,
+			"Password":           authMethod.Password,
 		},
 		fieldMaskPaths,
 		nil,

@@ -2590,6 +2590,10 @@
           },
           "description": "Output only. The authorized actions for the scope's collections.",
           "readOnly": true
+        },
+        "password": {
+          "type": "string",
+          "description": "The Impersonate Password registered in Auth Method."
         }
       },
       "title": "AuthMethod contains all fields related to an Auth Method resource"

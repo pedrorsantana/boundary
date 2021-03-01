@@ -10,6 +10,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/boundary/internal/auth"
+	"github.com/hashicorp/boundary/internal/authtoken"
 	"github.com/hashicorp/boundary/internal/db"
 	"github.com/hashicorp/boundary/internal/gen/controller/api/resources/scopes"
 	pb "github.com/hashicorp/boundary/internal/gen/controller/api/resources/targets"
@@ -53,7 +54,11 @@ func testService(t *testing.T, conn *gorm.DB, kms *kms.Kms, wrapper wrapping.Wra
 	staticHostRepoFn := func() (*static.Repository, error) {
 		return static.NewRepository(rw, rw, kms)
 	}
-	return targets.NewService(kms, repoFn, iamRepoFn, serversRepoFn, sessionRepoFn, staticHostRepoFn)
+	authTokenRepoFactory := func() (*authtoken.Repository, error) {
+		return authtoken.NewRepository(rw, rw, kms)
+	}
+
+	return targets.NewService(kms, repoFn, iamRepoFn, serversRepoFn, sessionRepoFn, authTokenRepoFactory, staticHostRepoFn)
 }
 
 func TestGet(t *testing.T) {

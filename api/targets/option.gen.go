@@ -139,6 +139,12 @@ func WithHostId(inHostId string) Option {
 	}
 }
 
+func WithImpersonate(inImpersonate bool) Option {
+	return func(o *options) {
+		o.postMap["impersonate"] = inImpersonate
+	}
+}
+
 func WithName(inName string) Option {
 	return func(o *options) {
 		o.postMap["name"] = inName

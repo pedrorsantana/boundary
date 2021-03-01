@@ -36,6 +36,7 @@ func NewAuthMethod(scopeId string, opt ...Option) (*AuthMethod, error) {
 			ScopeId:            scopeId,
 			Name:               opts.withName,
 			Description:        opts.withDescription,
+			Password:           opts.password,
 			MinLoginNameLength: 3,
 			MinPasswordLength:  8,
 		},

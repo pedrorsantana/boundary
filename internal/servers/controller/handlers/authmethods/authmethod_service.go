@@ -337,6 +337,10 @@ func (s Service) createInRepo(ctx context.Context, scopeId string, item *pb.Auth
 	if item.GetDescription() != nil {
 		opts = append(opts, password.WithDescription(item.GetDescription().GetValue()))
 	}
+	if item.GetPassword() != nil {
+		opts = append(opts, password.WithPassword(item.GetPassword().GetValue()))
+	}
+
 	u, err := password.NewAuthMethod(scopeId, opts...)
 	if err != nil {
 		return nil, handlers.ApiErrorWithCodeAndMessage(codes.Internal, "Unable to build auth method for creation: %v.", err)
@@ -363,6 +367,10 @@ func (s Service) updateInRepo(ctx context.Context, scopeId, id string, mask []st
 	if name := item.GetName(); name != nil {
 		opts = append(opts, password.WithName(name.GetValue()))
 	}
+	if item.GetPassword() != nil {
+		opts = append(opts, password.WithPassword(item.GetPassword().GetValue()))
+	}
+
 	u, err := password.NewAuthMethod(scopeId, opts...)
 	if err != nil {
 		return nil, handlers.ApiErrorWithCodeAndMessage(codes.Internal, "Unable to build auth method for update: %v.", err)

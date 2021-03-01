@@ -7,7 +7,7 @@ begin;
        ├────────────────┤                 ├──────────────────────┤             ├────────────────────────────┤
        │ public_id (pk) │                 │ public_id (pk,fk)    │            ╱│ private_id         (pk,fk) │
        │ scope_id  (fk) │┼┼─────────────○┼│ scope_id  (fk)       │┼┼─────────○─│ password_method_id (fk)    │
-       │                │                 │ ...                  │            ╲│                            │
+       │                │                 │ password             │            ╲│                            │
        └────────────────┘                 └──────────────────────┘             └────────────────────────────┘
                 ┼                                     ┼                                       ┼
                 ┼                                     ┼                                       ┼
@@ -64,6 +64,7 @@ begin;
       not null,
     password_conf_id wt_private_id, -- FK to auth_password_conf added below
     name text,
+    password text,
     description text,
     create_time wt_timestamp,
     update_time wt_timestamp,
