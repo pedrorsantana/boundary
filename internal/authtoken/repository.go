@@ -301,7 +301,8 @@ type AuthMethodPassword struct {
 }
 
 func (r *Repository) GetAuthMethodPasswordByAuthTokenId(ctx context.Context, id string, opt ...Option) (string, error) {
-	const op = "authtoken.(Repository).GetAuthMethodByTokenId"
+	const op = "authtoken.(Repository).GetAuthMethodPasswordByAuthTokenId"
+
 	if len(id) == 0 {
 		return "", errors.New(errors.InvalidParameter, op, "missing auth_token id")
 	}

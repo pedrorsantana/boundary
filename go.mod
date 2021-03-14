@@ -5,11 +5,13 @@ go 1.15
 replace github.com/hashicorp/boundary/api => ./api
 
 require (
+	github.com/ahmetalpbalkan/dexec v0.0.0-20160630173852-2538e5e2198f
 	github.com/armon/go-metrics v0.3.6
 	github.com/bufbuild/buf v0.37.0
 	github.com/dhui/dktest v0.3.4
 	github.com/fatih/color v1.10.0
 	github.com/favadi/protoc-go-inject-tag v1.1.0
+	github.com/fsouza/go-dockerclient v1.7.1
 	github.com/go-bindata/go-bindata/v3 v3.1.3
 	github.com/go-swagger/go-swagger v0.26.1
 	github.com/golang-migrate/migrate/v4 v4.14.1
@@ -61,6 +63,7 @@ require (
 	google.golang.org/grpc v1.35.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.25.1-0.20201208041424-160c7477e0e8
+	gopkg.in/yaml.v2 v2.4.0
 	mvdan.cc/gofumpt v0.1.0
 	nhooyr.io/websocket v1.8.6
 )

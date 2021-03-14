@@ -8,6 +8,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/field_mask.proto";
 import "controller/api/resources/sessions/v1/session.proto";
+import "controller/api/resources/secrets/v1/secret.proto";
 
 service SessionService {
 	// GetSession returns a stored Session if present.  The provided request
@@ -50,7 +51,9 @@ service SessionService {
 			summary: "Cancels a Session."
 		};
 	}
+
 }
+
 
 message GetSessionRequest {
 	string id = 1;

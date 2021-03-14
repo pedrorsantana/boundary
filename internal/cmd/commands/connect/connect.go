@@ -830,9 +830,15 @@ func (c *Command) handleExec(passthroughArgs []string) {
 			{
 				os.Setenv("PGPASSWORD", c.impersonateCredentials)
 			}
+		case "http":
+			{
+				args = append(args, "-H", fmt.Sprintf("Authorization: %s", c.impersonateCredentials))
+			}
 		}
 
 	}
+
+	fmt.Printf("\n%s\n", args)
 
 	args = append(passthroughArgs, args...)
 

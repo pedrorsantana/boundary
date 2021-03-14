@@ -58,7 +58,7 @@ func NewService(repoFn common.SessionRepoFactory, iamRepoFn common.IamRepoFactor
 
 var _ pbs.SessionServiceServer = Service{}
 
-// GetSessions implements the interface pbs.SessionServiceServer.
+// GetSession implements the interface pbs.SessionServiceServer.
 func (s Service) GetSession(ctx context.Context, req *pbs.GetSessionRequest) (*pbs.GetSessionResponse, error) {
 	if err := validateGetRequest(req); err != nil {
 		return nil, err

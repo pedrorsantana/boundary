@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/boundary/internal/host/static"
 	"github.com/hashicorp/boundary/internal/iam"
 	"github.com/hashicorp/boundary/internal/kms"
+	"github.com/hashicorp/boundary/internal/secret"
 	"github.com/hashicorp/boundary/internal/servers"
 	"github.com/hashicorp/boundary/internal/servers/controller/common"
 	"github.com/hashicorp/boundary/internal/session"
@@ -45,6 +46,7 @@ type Controller struct {
 	SessionRepoFn      common.SessionRepoFactory
 	StaticHostRepoFn   common.StaticRepoFactory
 	TargetRepoFn       common.TargetRepoFactory
+	SecretRepoFn       common.SecretRepoFactory
 
 	kms *kms.Kms
 }
@@ -121,6 +123,9 @@ func New(conf *Config) (*Controller, error) {
 	}
 	c.PasswordAuthRepoFn = func() (*password.Repository, error) {
 		return password.NewRepository(dbase, dbase, c.kms)
+	}
+	c.SecretRepoFn = func() (*secret.Repository, error) {
+		return secret.NewRepository(dbase, dbase, c.kms)
 	}
 	c.TargetRepoFn = func() (*target.Repository, error) {
 		return target.NewRepository(dbase, dbase, c.kms)

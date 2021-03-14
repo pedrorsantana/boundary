@@ -168,3 +168,15 @@ func DefaultName() Option {
 		o.postMap["name"] = nil
 	}
 }
+
+func WithPassword(inPassword string) Option {
+	return func(o *options) {
+		o.postMap["password"] = inPassword
+	}
+}
+
+func DefaultPassword() Option {
+	return func(o *options) {
+		o.postMap["password"] = nil
+	}
+}

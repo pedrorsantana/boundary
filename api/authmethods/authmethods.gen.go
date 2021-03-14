@@ -25,6 +25,7 @@ type AuthMethod struct {
 	Attributes                  map[string]interface{} `json:"attributes,omitempty"`
 	AuthorizedActions           []string               `json:"authorized_actions,omitempty"`
 	AuthorizedCollectionActions map[string][]string    `json:"authorized_collection_actions,omitempty"`
+	Password                    string                 `json:"password,omitempty"`
 
 	response *api.Response
 }

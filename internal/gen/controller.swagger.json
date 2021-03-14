@@ -33,6 +33,9 @@
       "name": "RoleService"
     },
     {
+      "name": "SecretService"
+    },
+    {
       "name": "SessionService"
     },
     {
@@ -1838,6 +1841,244 @@
         ]
       }
     },
+    "/v1/secret-session-events": {
+      "get": {
+        "operationId": "SecretService_ListSecretSessionEvents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/controller.api.services.v1.ListSecretSessionEventsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      }
+    },
+    "/v1/secret-session-logs/{id}": {
+      "get": {
+        "operationId": "SecretService_GetSecretSession",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/controller.api.resources.secrets.v1.SecretSessionLog"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The secret Id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      }
+    },
+    "/v1/secret-sessions": {
+      "post": {
+        "summary": "Create a request for view the secret.",
+        "operationId": "SecretService_RequestSecretAccess",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/controller.api.resources.secrets.v1.SecretSession"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/controller.api.resources.secrets.v1.SecretSession"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      }
+    },
+    "/v1/secrets": {
+      "get": {
+        "summary": "List all secrets.",
+        "operationId": "SecretService_ListSecrets",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/controller.api.services.v1.ListSecretsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "scope_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      },
+      "post": {
+        "summary": "Creates a single secret.",
+        "operationId": "SecretService_CreateSecret",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/controller.api.resources.secrets.v1.Secret"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/controller.api.resources.secrets.v1.Secret"
+            }
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      }
+    },
+    "/v1/secrets/authorize-session": {
+      "get": {
+        "summary": "Authorizes a Session.",
+        "operationId": "SecretService_AuthorizeSecretSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/controller.api.services.v1.AuthorizeSecretSessionResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The Id of the session request.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "secret_id",
+            "description": "The Id of the secret.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "description": "The User id.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "hash",
+            "description": "The hash of the request approval.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      }
+    },
+    "/v1/secrets/{id}": {
+      "get": {
+        "summary": "Get a specific secret.",
+        "operationId": "SecretService_GetSecret",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/controller.api.resources.secrets.v1.Secret"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a secret.",
+        "operationId": "SecretService_DeleteSecret",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/controller.api.services.v1.DeleteSecretResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The secret id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "controller.api.services.v1.SecretService"
+        ]
+      }
+    },
     "/v1/sessions": {
       "get": {
         "summary": "Lists all Sessions.",
@@ -3214,6 +3455,95 @@
         }
       }
     },
+    "controller.api.resources.secrets.v1.Secret": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "manager": {
+          "type": "string"
+        },
+        "scope_id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "created_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Output only. The time this resource was created.",
+          "readOnly": true
+        },
+        "updated_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Output only. The time this resource was last updated.",
+          "readOnly": true
+        }
+      }
+    },
+    "controller.api.resources.secrets.v1.SecretSession": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "scope_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "requested_time": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "secret_id": {
+          "type": "string"
+        },
+        "created_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Output only. The time this resource was created.",
+          "readOnly": true
+        },
+        "updated_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Output only. The time this resource was last updated.",
+          "readOnly": true
+        }
+      }
+    },
+    "controller.api.resources.secrets.v1.SecretSessionLog": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Output only. The session log ID",
+          "readOnly": true
+        },
+        "output": {
+          "type": "string",
+          "title": "Output only. The output of execution",
+          "readOnly": true
+        },
+        "created_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Output only. The time this resource was created.",
+          "readOnly": true
+        }
+      }
+    },
     "controller.api.resources.sessions.v1.Session": {
       "type": "object",
       "properties": {
@@ -3836,6 +4166,14 @@
         }
       }
     },
+    "controller.api.services.v1.AuthorizeSecretSessionResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
     "controller.api.services.v1.AuthorizeSessionRequest": {
       "type": "object",
       "properties": {
@@ -4008,6 +4346,17 @@
         }
       }
     },
+    "controller.api.services.v1.CreateSecretResponse": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string"
+        },
+        "item": {
+          "$ref": "#/definitions/controller.api.resources.secrets.v1.Secret"
+        }
+      }
+    },
     "controller.api.services.v1.CreateTargetResponse": {
       "type": "object",
       "properties": {
@@ -4055,6 +4404,9 @@
       "type": "object"
     },
     "controller.api.services.v1.DeleteScopeResponse": {
+      "type": "object"
+    },
+    "controller.api.services.v1.DeleteSecretResponse": {
       "type": "object"
     },
     "controller.api.services.v1.DeleteTargetResponse": {
@@ -4132,6 +4484,22 @@
       "properties": {
         "item": {
           "$ref": "#/definitions/controller.api.resources.scopes.v1.Scope"
+        }
+      }
+    },
+    "controller.api.services.v1.GetSecretResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/controller.api.resources.secrets.v1.Secret"
+        }
+      }
+    },
+    "controller.api.services.v1.GetSecretSessionResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/controller.api.resources.secrets.v1.SecretSessionLog"
         }
       }
     },
@@ -4254,6 +4622,28 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/controller.api.resources.scopes.v1.Scope"
+          }
+        }
+      }
+    },
+    "controller.api.services.v1.ListSecretSessionEventsResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/controller.api.resources.secrets.v1.SecretSession"
+          }
+        }
+      }
+    },
+    "controller.api.services.v1.ListSecretsResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/controller.api.resources.secrets.v1.Secret"
           }
         }
       }
@@ -4451,6 +4841,14 @@
       "properties": {
         "item": {
           "$ref": "#/definitions/controller.api.resources.users.v1.User"
+        }
+      }
+    },
+    "controller.api.services.v1.RequestSecretAccessResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/controller.api.resources.secrets.v1.SecretSession"
         }
       }
     },

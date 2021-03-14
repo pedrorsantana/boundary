@@ -5,6 +5,7 @@ import (
 	"github.com/hashicorp/boundary/internal/authtoken"
 	"github.com/hashicorp/boundary/internal/host/static"
 	"github.com/hashicorp/boundary/internal/iam"
+	"github.com/hashicorp/boundary/internal/secret"
 	"github.com/hashicorp/boundary/internal/servers"
 	"github.com/hashicorp/boundary/internal/session"
 	"github.com/hashicorp/boundary/internal/target"
@@ -18,4 +19,5 @@ type (
 	StaticRepoFactory       func() (*static.Repository, error)
 	SessionRepoFactory      func() (*session.Repository, error)
 	TargetRepoFactory       func() (*target.Repository, error)
+	SecretRepoFactory       func() (*secret.Repository, error)
 )

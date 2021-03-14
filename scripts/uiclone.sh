@@ -19,13 +19,13 @@ tempdir="$(dirname "${UI_CLONE_DIR}")"
 mkdir -p "${tempdir}"
 echo "*" > "${tempdir}/.gitignore"
 
-if ! [ -d "${UI_CLONE_DIR}/.git" ]; then
-	git clone https://github.com/hashicorp/boundary-ui "${UI_CLONE_DIR}"
-fi
+#if ! [ -d "${UI_CLONE_DIR}/.git" ]; then
+#	git clone https://github.com/hashicorp/boundary-ui "${UI_CLONE_DIR}"
+#fi
 
 cd "${UI_CLONE_DIR}"
-git reset --hard
-git fetch origin "${UI_COMMITISH}"
-git checkout "${UI_COMMITISH}"
-git pull --ff-only origin "${UI_COMMITISH}"
-git reset --hard "${UI_COMMITISH}"
+#git reset --hard
+#git fetch origin "${UI_COMMITISH}"
+#git checkout "${UI_COMMITISH}"
+#git pull --ff-only origin "${UI_COMMITISH}"
+#git reset --hard "${UI_COMMITISH}"

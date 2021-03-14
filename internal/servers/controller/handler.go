@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/boundary/internal/servers/controller/handlers/accounts"
 	"github.com/hashicorp/boundary/internal/servers/controller/handlers/authmethods"
 	"github.com/hashicorp/boundary/internal/servers/controller/handlers/host_sets"
+	"github.com/hashicorp/boundary/internal/servers/controller/handlers/secrets"
 	"github.com/hashicorp/boundary/internal/servers/controller/handlers/sessions"
 	"github.com/hashicorp/boundary/internal/servers/controller/handlers/targets"
 	"github.com/hashicorp/boundary/sdk/strutil"
@@ -138,6 +139,17 @@ func handleGrpcGateway(c *Controller, props HandlerProperties) (http.Handler, er
 	if err := services.RegisterUserServiceHandlerServer(ctx, mux, us); err != nil {
 		return nil, fmt.Errorf("failed to register user service handler: %w", err)
 	}
+	sc, err := secrets.NewService(
+		c.kms,
+		c.SecretRepoFn,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create secret service handler: %w", err)
+	}
+	if err := services.RegisterSecretServiceHandlerServer(ctx, mux, sc); err != nil {
+		return nil, fmt.Errorf("failed to register secret service handler: %w", err)
+	}
+
 	ts, err := targets.NewService(
 		c.kms,
 		c.TargetRepoFn,

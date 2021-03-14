@@ -389,7 +389,9 @@ func (g Grant) validateType() error {
 		resource.HostSet,
 		resource.Host,
 		resource.Target,
-		resource.Session:
+		resource.Session,
+		resource.Secret,
+		resource.SecretSession:
 		return nil
 	}
 	return errors.New(errors.InvalidParameter, op, fmt.Sprintf("unknown type specifier %q", g.typ))
