@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	hproxy "github.com/hashicorp/boundary/internal/servers/worker/hproxy"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/hashicorp/boundary/globals"
 	"github.com/hashicorp/boundary/internal/auth"
@@ -185,6 +187,9 @@ func handleGrpcGateway(c *Controller, props HandlerProperties) (http.Handler, er
 	if err := services.RegisterSessionServiceHandlerServer(ctx, mux, ss); err != nil {
 		return nil, fmt.Errorf("failed to register session service handler: %w", err)
 	}
+
+	service, err := hproxy.NewService(c.AuthTokenRepoFn)
+	go service.HttpProxyHandlerV1()
 
 	return mux, nil
 }
