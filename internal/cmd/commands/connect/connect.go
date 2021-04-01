@@ -74,6 +74,14 @@ type Command struct {
 	flagUsername    string
 	flagImpersonate bool
 
+	flagDbeaverConDriver   string
+	flagDbeaverConHost     string
+	flagDbeaverConPort     string
+	flagDbeaverConDb       string
+	flagDbeaverConName     string
+	flagDbeaverConUser     string
+	flagDbeaverConPassword string
+
 	// HTTP
 	httpFlags
 
@@ -88,6 +96,9 @@ type Command struct {
 
 	// SSH
 	sshFlags
+
+	// Dbeaver
+	dbeaverFlags
 
 	Func string
 
@@ -120,6 +131,8 @@ func (c *Command) Synopsis() string {
 		return sshSynopsis
 	case "kube":
 		return kubeSynopsis
+	case "dbeaver":
+		return dbeaverSynopsis
 	default:
 		return ""
 	}
@@ -256,6 +269,9 @@ func (c *Command) Flags() *base.FlagSets {
 	case "ssh":
 		sshOptions(c, set)
 
+	case "dbeaver":
+		dbeaverOptions(c, set)
+
 	case "kube":
 		kubeOptions(c, set)
 	}
@@ -323,6 +339,8 @@ func (c *Command) Run(args []string) (retCode int) {
 			c.flagExec = c.rdpFlags.defaultExec()
 		case "kube":
 			c.flagExec = c.kubeFlags.defaultExec()
+		case "dbeaver":
+			c.flagExec = c.dbeaverFlags.defaultExec()
 		}
 	}
 
@@ -809,6 +827,8 @@ func (c *Command) handleExec(passthroughArgs []string) {
 	case "ssh":
 		args = append(args, c.sshFlags.buildArgs(c, port, ip, addr)...)
 
+	case "dbeaver":
+		args = append(args, c.dbeaverFlags.buildArgs(c, port, ip, addr)...)
 	case "kube":
 		kubeArgs, err := c.kubeFlags.buildArgs(c, port, ip, addr)
 		if err != nil {
@@ -837,8 +857,6 @@ func (c *Command) handleExec(passthroughArgs []string) {
 		}
 
 	}
-
-	fmt.Printf("\n%s\n", args)
 
 	args = append(passthroughArgs, args...)
 

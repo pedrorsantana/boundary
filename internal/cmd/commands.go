@@ -259,6 +259,12 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 				Func:    "postgres",
 			}, nil
 		},
+		"connect dbeaver": func() (cli.Command, error) {
+			return &connect.Command{
+				Command: base.NewCommand(ui),
+				Func:    "dbeaver",
+			}, nil
+		},
 		"connect rdp": func() (cli.Command, error) {
 			return &connect.Command{
 				Command: base.NewCommand(ui),
